@@ -11,7 +11,9 @@ const tasks = [
 ];
 
 export default function TaskList() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  
+
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
     const updateOnlineStatus = () => {
@@ -30,6 +32,7 @@ export default function TaskList() {
     };
   }, []);
 
+
   const sendData = async () => {
     if (!isOnline) {
       alert('No internet connection. Please try again later.');
@@ -42,7 +45,6 @@ export default function TaskList() {
         return { id: task.id, name: task.name, images };
       });
 
-      // Simulate sending data to the server
       const response = await fetch('/api/sendData', {
         method: 'POST',
         headers: {
@@ -52,7 +54,6 @@ export default function TaskList() {
       });
 
       if (response.ok) {
-        // Clear localStorage after successful data transfer
         tasks.forEach((task) => {
           localStorage.removeItem(`task_${task.id}_images`);
         });

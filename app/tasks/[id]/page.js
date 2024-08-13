@@ -10,10 +10,11 @@ export default function TaskPage() {
   const { id } = useParams();
   const [imageList, setImageList] = useState([]);
   const [task, setTask] = useState({ name: '' });
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // This effect only runs on the client side
     const updateOnlineStatus = () => {
       setIsOnline(navigator.onLine);
     };
@@ -58,7 +59,7 @@ export default function TaskPage() {
       }
     }
   }, [id, isOnline]);
-  
+
   const addImage = (newImage) => {
     const updatedImages = [...imageList, newImage];
     setImageList(updatedImages);

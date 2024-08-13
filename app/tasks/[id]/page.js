@@ -16,14 +16,31 @@ export default function TaskPage() {
 
   useEffect(() => {
     if (id) {
+      if (isOnline) {
+        fetch(`/api/tasks/${id}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setTask(data.task || { name: '' });
+            const existingImages = JSON.parse(localStorage.getItem(`task_${id}_images`)) || [];
+            const fetchedImages = data.images || [];
+            const updatedImages = [...existingImages, ...fetchedImages];
+            setImageList(updatedImages);
+            localStorage.setItem(`task_${id}_images`, JSON.stringify(updatedImages));
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error('Error fetching task data:', error);
+            setIsLoading(false);
+          });
+      } else {
         const storedTask = JSON.parse(localStorage.getItem(`task_${id}`)) || { name: '' };
         const storedImages = JSON.parse(localStorage.getItem(`task_${id}_images`)) || [];
         setTask(storedTask);
         setImageList(storedImages);
         setIsLoading(false);
-    
+      }
     }
-  }, [id]);
+  }, [id, isOnline]);
 
   const addImage = (newImage) => {
     const updatedImages = [...imageList, newImage];

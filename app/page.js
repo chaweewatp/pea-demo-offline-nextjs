@@ -51,6 +51,7 @@ export default function TaskList() {
             <Link
               className="text-blue-600 hover:underline"
               href={`/tasks/${task.id}`}
+              prefetch={true}
             >
               {task.name}
             </Link>

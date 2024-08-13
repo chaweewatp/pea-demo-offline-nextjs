@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
 const ImageUploader = dynamic(() => import('../../../components/ImageUploader'), { ssr: false });
 const ImageList = dynamic(() => import('../../../components/ImageList'), { ssr: false });
 

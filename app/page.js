@@ -1,7 +1,7 @@
 // app/page.js
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const tasks = [
@@ -11,7 +11,7 @@ const tasks = [
 ];
 
 export default function TaskList() {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
     const updateOnlineStatus = () => {
@@ -28,17 +28,6 @@ export default function TaskList() {
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
     };
-  }, []);
-
-  useEffect(() => {
-    // Initialize local storage for each task's images
-    tasks.forEach(task => {
-      const key = `task_${task.id}_images`;
-      if (!localStorage.getItem(key)) {
-        localStorage.setItem(key, JSON.stringify([]));
-      }
-    });
-    console.log(tasks)
   }, []);
 
   const sendData = async () => {

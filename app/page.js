@@ -1,7 +1,7 @@
 // app/page.js
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 const tasks = [
@@ -11,8 +11,6 @@ const tasks = [
 ];
 
 export default function TaskList() {
-  
-
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
@@ -32,7 +30,6 @@ export default function TaskList() {
     };
   }, []);
 
-
   const sendData = async () => {
     if (!isOnline) {
       alert('No internet connection. Please try again later.');
@@ -45,6 +42,7 @@ export default function TaskList() {
         return { id: task.id, name: task.name, images };
       });
 
+      // Simulate sending data to the server
       const response = await fetch('/api/sendData', {
         method: 'POST',
         headers: {
@@ -54,6 +52,7 @@ export default function TaskList() {
       });
 
       if (response.ok) {
+        // Clear localStorage after successful data transfer
         tasks.forEach((task) => {
           localStorage.removeItem(`task_${task.id}_images`);
         });
@@ -73,8 +72,8 @@ export default function TaskList() {
       <ul className="list-disc pl-5">
         {tasks.map((task) => (
           <li key={task.id} className="mb-2">
-            <Link href={`/tasks/${task.id}`} className="text-blue-600 hover:underline">
-              {task.name}
+            <Link href={`/tasks/${task.id}`}>
+              <a className="text-blue-600 hover:underline">{task.name}</a>
             </Link>
           </li>
         ))}

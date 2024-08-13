@@ -1,21 +1,13 @@
 // app/page.js
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const tasks = [
-  { id: 1, name: "Task 1" },
-  { id: 2, name: "Task 2" },
-  { id: 3, name: "Task 3" },
-  { id: 4, name: "Task 4" },
-  { id: 5, name: "Task 5" },
-  { id: 6, name: "Task 6" },
-  { id: 7, name: "Task 7" },
-  { id: 8, name: "Task 8" },
-  { id: 9, name: "Task 9" },
-  { id: 10, name: "Task 10" },
-
+  { id: 1, name: 'Task 1' },
+  { id: 2, name: 'Task 2' },
+  { id: 3, name: 'Task 3' },
 ];
 
 export default function TaskList() {
@@ -26,36 +18,46 @@ export default function TaskList() {
       setIsOnline(navigator.onLine);
     };
 
-    window.addEventListener("online", updateOnlineStatus);
-    window.addEventListener("offline", updateOnlineStatus);
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
 
     // Initial check
     updateOnlineStatus();
 
     return () => {
-      window.removeEventListener("online", updateOnlineStatus);
-      window.removeEventListener("offline", updateOnlineStatus);
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
     };
+  }, []);
+
+  useEffect(() => {
+    // Initialize local storage for each task's images
+    tasks.forEach(task => {
+      const key = `task_${task.id}_images`;
+      if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, JSON.stringify([]));
+      }
+    });
+    console.log(tasks)
   }, []);
 
   const sendData = async () => {
     if (!isOnline) {
-      alert("No internet connection. Please try again later.");
+      alert('No internet connection. Please try again later.');
       return;
     }
 
     try {
       const taskData = tasks.map((task) => {
-        const images =
-          JSON.parse(localStorage.getItem(`task_${task.id}_images`)) || [];
+        const images = JSON.parse(localStorage.getItem(`task_${task.id}_images`)) || [];
         return { id: task.id, name: task.name, images };
       });
 
       // Simulate sending data to the server
-      const response = await fetch("/api/sendData", {
-        method: "POST",
+      const response = await fetch('/api/sendData', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(taskData),
       });
@@ -65,13 +67,13 @@ export default function TaskList() {
         tasks.forEach((task) => {
           localStorage.removeItem(`task_${task.id}_images`);
         });
-        alert("Data sent successfully and tasks deleted.");
+        alert('Data sent successfully and tasks deleted.');
       } else {
-        alert("Failed to send data. Please try again.");
+        alert('Failed to send data. Please try again.');
       }
     } catch (error) {
-      console.error("Error sending data:", error);
-      alert("An error occurred. Please try again later.");
+      console.error('Error sending data:', error);
+      alert('An error occurred. Please try again later.');
     }
   };
 
@@ -81,19 +83,16 @@ export default function TaskList() {
       <ul className="list-disc pl-5">
         {tasks.map((task) => (
           <li key={task.id} className="mb-2">
-            <Link
-              href={`/tasks/${task.id}`}
-              className="text-blue-600 hover:underline"
-            >
+            <Link href={`/tasks/${task.id}`} className="text-blue-600 hover:underline">
               {task.name}
-            </Link>{" "}
+            </Link>
           </li>
         ))}
       </ul>
       <button
         onClick={sendData}
         className={`mt-4 px-4 py-2 bg-blue-500 text-white rounded ${
-          !isOnline ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+          !isOnline ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
         }`}
         disabled={!isOnline}
       >

@@ -3,8 +3,9 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import ImageUploader from '../../../components/ImageUploader';
-import ImageList from '../../../components/ImageList';
+const ImageUploader = dynamic(() => import('../../../components/ImageUploader'), { ssr: false });
+const ImageList = dynamic(() => import('../../../components/ImageList'), { ssr: false });
+
 
 export default function TaskPage() {
   const { id } = useParams(); // Use `useParams` to get the task ID
